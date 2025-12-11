@@ -38,7 +38,7 @@ jobs:
 
       - name: Publish CUE module
         env:
-          CUE_REGISTRY: ghcr.io/emillamm
+          CUE_REGISTRY: github.com/emillamm/cuefig=ghcr.io/emillamm,registry.cue.works
         run: |
           cue mod publish "v${{ steps.get-version.outputs.nextStrict }}"
 
