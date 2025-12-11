@@ -4,7 +4,9 @@
     "cue@0.15"
   ],
   "shell": {
-    "init_hook": [],
+    "init_hook": [
+	    "./cuefig/generate.sh"
+    ],
     "scripts": {}
   }
 }

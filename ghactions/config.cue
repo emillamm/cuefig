@@ -9,3 +9,4 @@ package ghactions
 #GoogleAuthAction:     "google-github-actions/auth@v3"
 #DockerLoginAction:    "docker/login-action@v3"
 #DockerPushAction:     "docker/build-push-action@v6"
+#CueInstallAction:     "cue-lang/setup-cue@v1.0.1"

@@ -1,0 +1,35 @@
+name: Publish
+"on":
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/*.md'
+      - manifests/**
+jobs:
+  publish:
+    permissions:
+      contents: write
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v5
+      - name: Install CUE
+        uses: cue-lang/setup-cue@v1.0.1
+      - id: get-version
+        name: Compute next version based on previous tag in commit history
+        uses: ietf-tools/semver-action@v1
+      - env:
+          CUE_REGISTRY: github.com/${{ github.repository }}=ghcr.io/${{ github.repository_owner }},registry.cue.works
+        run: cue mod publish "v${{ steps.get-version.outputs.nextStrict }}
+      - name: Create tag
+        uses: actions/github-script@v8
+        with:
+          script: |-
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/${{ steps.get-version.outputs.nextStrict }}",
+              sha: context.sha
+            })

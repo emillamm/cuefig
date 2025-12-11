@@ -11,4 +11,5 @@ _wf: workflows & {
 	#steps: gar: #Dockerfiles: ["Dockerfile1", "Dockerfile2"]
 }
 
-example: _wf.go.#PublishService
+//example: _wf.go.#PublishService
+example: workflows.cue.#PublishCuefig

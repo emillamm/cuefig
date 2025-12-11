@@ -18,9 +18,11 @@ import "github.com/emillamm/cuefig/ghactions/steps"
 }
 
 #TestWorkflow: #Workflow & {
+	name: "Test"
 	on: pull_request: types: ["opened", "reopened", "synchronize"]
 }
 
 #PublishWorkflow: #Workflow & {
+	name: "Publish"
 	on: push: {}
 }
