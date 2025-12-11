@@ -26,7 +26,7 @@ jobs:
           noVersionBumpBehavior: patch
       - env:
           CUE_REGISTRY: github.com/${{ github.repository }}=ghcr.io/${{ github.repository_owner }},registry.cue.works
-        run: cue mod publish "v${{ steps.get-version.outputs.nextStrict }}
+        run: cue mod publish "v${{ steps.get-version.outputs.nextStrict }}"
       - name: Create tag
         uses: actions/github-script@v8
         with:
