@@ -20,6 +20,10 @@ jobs:
       - id: get-version
         name: Compute next version based on previous tag in commit history
         uses: ietf-tools/semver-action@v1
+        with:
+          token: ${{ github.token }}
+          branch: main
+          noVersionBumpBehavior: patch
       - env:
           CUE_REGISTRY: github.com/${{ github.repository }}=ghcr.io/${{ github.repository_owner }},registry.cue.works
         run: cue mod publish "v${{ steps.get-version.outputs.nextStrict }}

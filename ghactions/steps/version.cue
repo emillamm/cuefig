@@ -8,6 +8,11 @@ version: #GetVersionStep: githubactions.#Step & {
 	id:   "get-version"
 	name: "Compute next version based on previous tag in commit history"
 	uses: ghactions.#SemverAction
+	with: {
+		token:                 "${{ github.token }}"
+		branch:                "main"
+		noVersionBumpBehavior: "patch"
+	}
 }
 
 version: #GetSha7Step: githubactions.#Step & {
