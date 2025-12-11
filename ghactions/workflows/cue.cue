@@ -9,6 +9,7 @@ cue: #PublishCuefig: #PublishWorkflow & {
 		#steps.github.#CheckoutStep,
 		#steps.cue.#InstallStep,
 		#steps.version.#GetVersionStep,
+		#steps.cue.#LoginStep,
 		#steps.cue.#PublishStep,
 		#steps.version.#CreateTagStep,
 	]
