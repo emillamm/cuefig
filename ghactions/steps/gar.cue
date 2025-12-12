@@ -13,6 +13,7 @@ gar: #Dockerfile:                 *"Dockerfile" | _
 gar: #Dockerfiles: *["Dockerfile"] | _
 
 gar: #AuthStep: githubactions.#Step & {
+	id:   "auth"
 	name: "Authenticate with Google Cloud"
 	uses: ghactions.#GoogleAuthAction
 	with: {
