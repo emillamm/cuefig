@@ -9,10 +9,20 @@ gar: #ArtifactRegistrySA:         string
 gar: #ArtifactRegistryRegion:     string
 gar: #ArtifactRegistryRepository: string
 gar: #GCPProject:                 string
-gar: #Containers: [#Container] | *gar.containers.#SimpleService.#Containers
+gar: #ContainerConfig:            #ContainerConfig | gar.containerconfig.#SimpleService
+
+#ContainerConfig: {
+	#Name: string
+	#Containers: [#Container, ...]
+}
+
+#Container: {
+	#Dockerfile: string
+	#Image:      string
+}
 
 // Simple configuration with a container
-gar: containers: #SimpleService: T={
+gar: containerconfig: #SimpleService: T=#ContainerConfig & {
 	#Name: string | *"${{ github.event.repository.name }}"
 	#Containers: [
 		#Container & {
@@ -23,7 +33,7 @@ gar: containers: #SimpleService: T={
 }
 
 // Stateful configuration with service and database migration containers
-gar: containers: #StatefulService: T={
+gar: containerconfig: #StatefulService: T=#ContainerConfig & {
 	#Name: string | *"${{ github.event.repository.name }}"
 	#Containers: [
 		#Container & {
@@ -35,11 +45,6 @@ gar: containers: #StatefulService: T={
 			#Image:      "\(T.#Name)-migrate"
 		},
 	]
-}
-
-#Container: {
-	#Dockerfile: string
-	#Image:      string
 }
 
 gar: #AuthStep: githubactions.#Step & {
@@ -65,7 +70,7 @@ gar: #LoginStep: githubactions.#Step & {
 }
 
 gar: #PushSteps: [
-	for i in gar.#Containers {
+	for i in gar.#ContainerConfig.#Containers {
 		githubactions.#Step & {
 			name: "Push image to Google Artifact Registry"
 			uses: ghactions.#DockerPushAction

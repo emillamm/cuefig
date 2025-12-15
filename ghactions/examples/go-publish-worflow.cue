@@ -8,6 +8,7 @@ _wf: workflows & {
 	#steps: gar: #ArtifactRegistryRegion:     "xyz"
 	#steps: gar: #ArtifactRegistryRepository: "xyz"
 	#steps: gar: #GCPProject:                 "xyz"
+	#steps: gar: #ContainerConfig:            gar.containerconfig.#SimpleService
 }
 
 example: _wf.go.#PublishService
