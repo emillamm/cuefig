@@ -1,0 +1,17 @@
+package examples
+
+import "github.com/emillamm/cuefig/k8s"
+
+_k8s: k8s & {
+	#Name:             "myservice"
+	#Project:          "myproject"
+	#Region:           "us-east1"
+	#ContainerVersion: "0.0.0-xyz"
+	deployment: #GSA: "google-service-account@myproject.iam.gserviceaccount.com"
+}
+
+ns: _k8s.#Namespace
+job: _k8s.spanner.#MigrationJob & {}
+service: _k8s.rollout.#Service
+rollout: _k8s.rollout.#Rollout & {}
+sa: _k8s.deployment.#ServiceAccount
