@@ -9,8 +9,38 @@ gar: #ArtifactRegistrySA:         string
 gar: #ArtifactRegistryRegion:     string
 gar: #ArtifactRegistryRepository: string
 gar: #GCPProject:                 string
-gar: #Dockerfile:                 *"Dockerfile" | _
-gar: #Dockerfiles: *["Dockerfile"] | _
+gar: #Containers: [#Container] | *gar.containers.#SimpleService.#Containers
+
+// Simple configuration with a container
+gar: containers: #SimpleService: T={
+	#Name: string | *"${{ github.event.repository.name }}"
+	#Containers: [
+		#Container & {
+			#Dockerfile: "Dockerfile"
+			#Image:      "\(T.#Name)-service"
+		},
+	]
+}
+
+// Stateful configuration with service and database migration containers
+gar: containers: #StatefulService: T={
+	#Name: string | *"${{ github.event.repository.name }}"
+	#Containers: [
+		#Container & {
+			#Dockerfile: "service.Dockerfile"
+			#Image:      "\(T.#Name)-service"
+		},
+		#Container & {
+			#Dockerfile: "migrate.Dockerfile"
+			#Image:      "\(T.#Name)-migrate"
+		},
+	]
+}
+
+#Container: {
+	#Dockerfile: string
+	#Image:      string
+}
 
 gar: #AuthStep: githubactions.#Step & {
 	id:   "auth"
@@ -34,36 +64,19 @@ gar: #LoginStep: githubactions.#Step & {
 	}
 }
 
-gar: #PushStep: githubactions.#Step & {
-	name: "Tag Docker image and push to Google Artifact Registry"
-	uses: ghactions.#DockerPushAction
-	with: {
-		file: gar.#Dockerfile
-		push: true
-		secrets: """
-			github_token=${{ steps.get-token.outputs.token }}
-			"""
-		tags: """
-	\(gar.#ArtifactRegistryRegion)-docker.pkg.dev/\(gar.#GCPProject)/\(gar.#ArtifactRegistryRepository)/${{ github.event.repository.name }}-migrate:${{ steps.get-version.outputs.nextStrict }}-${{ steps.get-sha7.outputs.sha7 }}
-	"""
-	}
-
-}
-
 gar: #PushSteps: [
-	//for i in ["a", "b"] if true githubactions.#Step & {
-	for i in gar.#Dockerfiles {
+	for i in gar.#Containers {
 		githubactions.#Step & {
-			name: "Tag Docker image and push to Google Artifact Registry"
+			name: "Push image to Google Artifact Registry"
 			uses: ghactions.#DockerPushAction
 			with: {
-				file: i
+				file: i.#Dockerfile
 				push: true
 				secrets: """
 					github_token=${{ steps.get-token.outputs.token }}
 					"""
 				tags: """
-		\(gar.#ArtifactRegistryRegion)-docker.pkg.dev/\(gar.#GCPProject)/\(gar.#ArtifactRegistryRepository)/${{ github.event.repository.name }}-migrate:${{ steps.get-version.outputs.nextStrict }}-${{ steps.get-sha7.outputs.sha7 }}
+		\(gar.#ArtifactRegistryRegion)-docker.pkg.dev/\(gar.#GCPProject)/\(gar.#ArtifactRegistryRepository)/\(i.#Image):${{ steps.get-version.outputs.nextStrict }}-${{ steps.get-sha7.outputs.sha7 }}
 		"""
 			}
 		}

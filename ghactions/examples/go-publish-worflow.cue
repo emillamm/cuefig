@@ -8,8 +8,7 @@ _wf: workflows & {
 	#steps: gar: #ArtifactRegistryRegion:     "xyz"
 	#steps: gar: #ArtifactRegistryRepository: "xyz"
 	#steps: gar: #GCPProject:                 "xyz"
-	#steps: gar: #Dockerfiles: ["Dockerfile1", "Dockerfile2"]
 }
 
-//example: _wf.go.#PublishService
-example: workflows.cue.#PublishCuefig
+example: _wf.go.#PublishService
+//example: workflows.cue.#PublishCuefig
