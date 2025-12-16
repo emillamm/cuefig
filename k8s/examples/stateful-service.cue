@@ -7,6 +7,7 @@ _k8s: k8s & {
 	#Project:          "myproject"
 	#Region:           "us-east1"
 	#ContainerVersion: "0.0.0-xyz"
+
 	deployment: #GSA: "google-service-account@myproject.iam.gserviceaccount.com"
 }
 
