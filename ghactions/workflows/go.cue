@@ -4,6 +4,7 @@ import "list"
 
 go: #Test: #TestWorkflow & {
 	jobs: test: permissions: {
+		contents: "read"
 		packages: "read"
 	}
 	jobs: test: steps: [
@@ -16,6 +17,7 @@ go: #Test: #TestWorkflow & {
 		#steps.go.#ModCacheStep,
 		#steps.go.#BuildCacheStep,
 		// Verify empty cue-gen output
+		#steps.cue.#LoginStep,
 		#steps.devbox.#DevboxCueGenVerifyStep,
 		// Run tests
 		#steps.devbox.#DevboxCIStep,
@@ -24,9 +26,8 @@ go: #Test: #TestWorkflow & {
 
 go: #PublishService: #PublishWorkflow & {
 	jobs: publish: permissions: {
-		packages:   "read"
-		contents:   "write"
-		"id-token": "write"
+		contents: "write"
+		packages: "read"
 	}
 	_steps: [
 		// Prepare repo
@@ -38,12 +39,12 @@ go: #PublishService: #PublishWorkflow & {
 		#steps.go.#ModCacheStep,
 		#steps.go.#BuildCacheStep,
 		// Verify empty cue-gen output
+		#steps.cue.#LoginStep,
 		#steps.devbox.#DevboxCueGenVerifyStep,
 		// Prepare release
 		#steps.version.#GetVersionStep,
 		#steps.version.#GetSha7Step,
 		#steps.version.#WriteReleaseFileStep,
-		#steps.cue.#LoginStep,
 		#steps.devbox.#DevboxReleaseStep,
 		#steps.version.#ReleaseCommitStep,
 		// Run tests
