@@ -25,7 +25,7 @@ version: #GetSha7Step: githubactions.#Step & {
 
 version: #WriteReleaseFileStep: githubactions.#Step & {
 	name: "Write version to .release file"
-	run:  "echo '${{ steps.get-version.outputs.nextStrict }}' > .release"
+	run:  "echo '${{ steps.get-version.outputs.nextStrict }}-${{ steps.get-sha7.outputs.sha7 }}' > .release"
 }
 
 version: #ReleaseCommitStep: githubactions.#Step & {
