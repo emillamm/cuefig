@@ -14,6 +14,7 @@ go: #Test: #TestWorkflow & {
 
 go: #PublishService: #PublishWorkflow & {
 	jobs: publish: permissions: {
+		packages:   "read"
 		contents:   "write"
 		"id-token": "write"
 	}
