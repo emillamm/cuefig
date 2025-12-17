@@ -8,7 +8,7 @@ go: #Test: #TestWorkflow & {
 		#steps.github.#RetrieveAccessTokenStep,
 		#steps.github.#ConfigureAccessTokenStep,
 		#steps.devbox.#DevboxInstallStep,
-		#steps.devbox.#DevboxRunCIStep,
+		#steps.devbox.#DevboxCIStep,
 	]
 }
 
@@ -28,14 +28,15 @@ go: #PublishService: #PublishWorkflow & {
 		#steps.go.#ModCacheStep,
 		#steps.go.#BuildCacheStep,
 		// Prepare release
+		#steps.devbox.#DevboxCueGenVerifyStep,
 		#steps.version.#GetVersionStep,
 		#steps.version.#GetSha7Step,
 		#steps.version.#WriteReleaseFileStep,
 		#steps.cue.#LoginStep,
-		#steps.devbox.#DevboxRunReleaseStep,
+		#steps.devbox.#DevboxReleaseStep,
 		#steps.version.#ReleaseCommitStep,
 		// Run tests
-		#steps.devbox.#DevboxRunCIStep,
+		#steps.devbox.#DevboxCIStep,
 		// Push containers
 		#steps.gar.#AuthStep,
 		#steps.gar.#LoginStep,
