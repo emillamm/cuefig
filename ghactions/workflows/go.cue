@@ -30,6 +30,7 @@ go: #PublishService: #PublishWorkflow & {
 		#steps.version.#GetVersionStep,
 		#steps.version.#GetSha7Step,
 		#steps.version.#WriteReleaseFileStep,
+		#steps.cue.#LoginStep,
 		#steps.devbox.#DevboxRunReleaseStep,
 		#steps.version.#ReleaseCommitStep,
 		// Run tests
