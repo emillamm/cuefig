@@ -8,7 +8,7 @@ go: #Test: #TestWorkflow & {
 		#steps.github.#RetrieveAccessTokenStep,
 		#steps.github.#ConfigureAccessTokenStep,
 		#steps.devbox.#DevboxInstallStep,
-		#steps.devbox.#DevboxRunStep,
+		#steps.devbox.#DevboxRunCIStep,
 	]
 }
 
