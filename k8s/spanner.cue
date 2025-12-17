@@ -6,8 +6,31 @@ import batch "cue.dev/x/k8s.io/api/batch/v1"
 
 import "list"
 
+// spanner configuration
 spanner: #Instance: string | *"\(#Project)-prod-db"
 spanner: #Database: string | *"\(#Name)-prod"
+spanner: #Env: [...core.#EnvVar] | *[
+	{
+		name:  "POSTGRES_DATABASE"
+		value: spanner.#Database
+	},
+	{
+		name:  "POSTGRES_HOST"
+		value: "localhost"
+	},
+	{
+		name:  "POSTGRES_PORT"
+		value: "5432"
+	},
+	{
+		name:  "POSTGRES_USER"
+		value: ""
+	},
+	{
+		name:  "POSTGRES_PASS"
+		value: ""
+	},
+]
 
 // Sidecar init-container used for accessing spanner from container
 spanner: #Sidecar: core.#Container & {
@@ -31,7 +54,6 @@ spanner: #Sidecar: core.#Container & {
 	}
 }
 
-spanner: #MigrationJobEnv: [...core.#EnvVar] | *list.Concat([#CommonEnv, spanner.#CommonEnv])
 spanner: #MigrationJob: batch.#Job & {
 	metadata: namespace: #Name
 	metadata: name:      "db-migrate"
@@ -50,31 +72,8 @@ spanner: #MigrationJob: batch.#Job & {
 			{
 				name:  "pgmigrate"
 				image: "\(#Region)-docker.pkg.dev/\(#Project)/\(#Project)/\(#Name)-migrate:\(#ContainerVersion)"
-				env:   spanner.#MigrationJobEnv
+				env: list.Concat([#CommonEnv, spanner.#Env])
 			},
 		]
 	}
 }
-
-spanner: #CommonEnv: [...core.#EnvVar] | *[
-	{
-		name:  "POSTGRES_DATABASE"
-		value: spanner.#Database
-	},
-	{
-		name:  "POSTGRES_HOST"
-		value: "localhost"
-	},
-	{
-		name:  "POSTGRES_PORT"
-		value: "5432"
-	},
-	{
-		name:  "POSTGRES_USER"
-		value: ""
-	},
-	{
-		name:  "POSTGRES_PASS"
-		value: ""
-	},
-]

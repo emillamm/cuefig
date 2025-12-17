@@ -4,10 +4,16 @@ import core "cue.dev/x/k8s.io/api/core/v1"
 
 import "list"
 
-rollout: #Env: *list.Concat([rollout.#CommonEnv, rollout.#ExtraEnv]) | _
-rollout: #CommonEnv: *spanner.#CommonEnv | _
+// rollout configuration
+rollout: #Env: [...core.#EnvVar] | *#CommonEnv
 rollout: #ExtraEnv: [...core.#EnvVar] | *[]
 rollout: #Port: int | *8080
+rollout: #InitContainers: [...core.#Container]
+
+rolloutconfiguration: stateful: rollout & {
+	#Env: list.Concat([#CommonEnv, spanner.#Env])
+	#InitContainers: [spanner.#Sidecar]
+}
 
 rollout: #Rollout: {
 	apiVersion: "argoproj.io/v1alpha1"
@@ -41,7 +47,7 @@ rollout: #Rollout: {
 			}]
 		}
 		serviceAccountName: "deployment-sa"
-		initContainers: [spanner.#Sidecar]
+		initContainers:     rollout.#InitContainers
 		containers: [{
 			name:            #Name
 			imagePullPolicy: "IfNotPresent"
@@ -72,7 +78,7 @@ rollout: #Rollout: {
 				memory:              "512Mi"
 				"ephemeral-storage": "1Gi"
 			}
-			env: rollout.#Env
+			env: list.Concat([rollout.#Env, rollout.#ExtraEnv])
 		}]
 	}
 }
