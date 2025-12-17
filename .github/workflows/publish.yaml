@@ -6,6 +6,7 @@ name: Publish
     paths-ignore:
       - '**/*.md'
       - manifests/**
+      - .release
 jobs:
   publish:
     permissions:

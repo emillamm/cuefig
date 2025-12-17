@@ -9,7 +9,7 @@ import "github.com/emillamm/cuefig/ghactions/steps"
 #Workflow: githubactions.#Workflow & {
 	#Runner: *"ubuntu-latest" | _
 	#Branches: ["main"]
-	#PathsIgnore: ["**/*.md", "manifests/**"]
+	#PathsIgnore: ["**/*.md", "manifests/**", ".release"]
 	on: [_]: {
 		branches:       #Branches
 		"paths-ignore": #PathsIgnore

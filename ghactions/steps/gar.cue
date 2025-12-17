@@ -69,7 +69,7 @@ gar: #LoginStep: githubactions.#Step & {
 	}
 }
 
-gar: #PushSteps: [
+gar: #PushImageSteps: [
 	for i in gar.#ContainerConfig.#Containers {
 		githubactions.#Step & {
 			name: "Push image to Google Artifact Registry"

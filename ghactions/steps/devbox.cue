@@ -4,7 +4,7 @@ import "cue.dev/x/githubactions"
 
 import "github.com/emillamm/cuefig/ghactions"
 
-devbox: #DevboxRunCommand: *"devbox run ci" | _
+devbox: #DevboxRunCICommand: *"devbox run ci" | _
 
 devbox: #DevboxInstallStep: githubactions.#Step & {
 	name: "Install Devbox and environment"
@@ -13,11 +13,20 @@ devbox: #DevboxInstallStep: githubactions.#Step & {
 }
 
 devbox: #DevboxRunStep: githubactions.#Step & {
-	name: "Run CI task with Devbox"
+	name: *"Run devbox command" | _
 	env: {
 		// Override existing GH_TOKEN to access
 		// internal private repos.
 		GH_TOKEN: "${{ steps.get-token.outputs.token }}"
 	}
-	run: devbox.#DevboxRunCommand
+}
+
+devbox: #DevboxRunCIStep: devbox.#DevboxRunStep & {
+	name: "Run devbox CI task"
+	run:  devbox.#DevboxRunCICommand
+}
+
+devbox: #DevboxRunReleaseStep: devbox.#DevboxRunStep & {
+	name: "Run devbox release task"
+	run:  "devbox run cue-gen"
 }
