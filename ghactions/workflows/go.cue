@@ -3,11 +3,21 @@ package workflows
 import "list"
 
 go: #Test: #TestWorkflow & {
+	jobs: test: permissions: {
+		packages: "read"
+	}
 	jobs: test: steps: [
+		// Prepare repo
 		#steps.github.#CheckoutStep,
 		#steps.github.#RetrieveAccessTokenStep,
 		#steps.github.#ConfigureAccessTokenStep,
+		// Prepare devbox
 		#steps.devbox.#DevboxInstallStep,
+		#steps.go.#ModCacheStep,
+		#steps.go.#BuildCacheStep,
+		// Verify empty cue-gen output
+		#steps.devbox.#DevboxCueGenVerifyStep,
+		// Run tests
 		#steps.devbox.#DevboxCIStep,
 	]
 }
@@ -27,8 +37,9 @@ go: #PublishService: #PublishWorkflow & {
 		#steps.devbox.#DevboxInstallStep,
 		#steps.go.#ModCacheStep,
 		#steps.go.#BuildCacheStep,
-		// Prepare release
+		// Verify empty cue-gen output
 		#steps.devbox.#DevboxCueGenVerifyStep,
+		// Prepare release
 		#steps.version.#GetVersionStep,
 		#steps.version.#GetSha7Step,
 		#steps.version.#WriteReleaseFileStep,
