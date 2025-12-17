@@ -26,8 +26,9 @@ go: #Test: #TestWorkflow & {
 
 go: #PublishService: #PublishWorkflow & {
 	jobs: publish: permissions: {
-		contents: "write"
-		packages: "read"
+		contents:   "write"
+		"id-token": "write"
+		packages:   "read"
 	}
 	_steps: [
 		// Prepare repo
