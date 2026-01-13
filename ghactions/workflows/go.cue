@@ -60,3 +60,30 @@ go: #PublishService: #PublishWorkflow & {
 	]
 	jobs: publish: steps: list.FlattenN(_steps, 1)
 }
+
+go: #PublishLibrary: #PublishWorkflow & {
+	jobs: publish: permissions: {
+		contents: "write"
+		packages: "read"
+	}
+	jobs: test: steps: [
+		// Prepare repo
+		#steps.github.#CheckoutStep,
+		#steps.github.#RetrieveAccessTokenStep,
+		#steps.github.#ConfigureAccessTokenStep,
+		// Prepare devbox
+		#steps.devbox.#DevboxInstallStep,
+		#steps.go.#ModCacheStep,
+		#steps.go.#BuildCacheStep,
+		// Verify empty cue-gen output
+		#steps.cue.#LoginStep,
+		#steps.devbox.#DevboxCueGenVerifyStep,
+		// Prepare release
+		#steps.version.#GetVersionStep,
+		#steps.version.#GetSha7Step,
+		// Run tests
+		#steps.devbox.#DevboxCIStep,
+		// Push version
+		#steps.version.#CreateTagStep,
+	]
+}
