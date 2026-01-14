@@ -50,7 +50,7 @@ version: #CreateTagStep: githubactions.#Step & {
 		github.rest.git.createRef({
 		  owner: context.repo.owner,
 		  repo: context.repo.repo,
-		  ref: "refs/tags/${{ steps.get-version.outputs.nextStrict }}",
+		  ref: "refs/tags/v${{ steps.get-version.outputs.nextStrict }}",
 		  sha: context.sha
 		})
 		"""
