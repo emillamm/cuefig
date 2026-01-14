@@ -26,3 +26,11 @@ github: #ConfigureAccessTokenStep: githubactions.#Step & {
 		git config --global url."https://x-access-token:${{ steps.get-token.outputs.token }}@github.com/".insteadOf "https://github.com/"
 		"""
 }
+
+github: #GHAuthMixin: githubactions.#Step & {
+	env: {
+		// Override existing GH_TOKEN to access
+		// internal private repos.
+		GH_TOKEN: "${{ steps.get-token.outputs.token }}"
+	}
+}

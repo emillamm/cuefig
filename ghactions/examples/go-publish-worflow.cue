@@ -11,7 +11,9 @@ _wf: workflows & {
 	#steps: gar: #ContainerConfig:            gar.containerconfig.#SimpleService
 }
 
-//exampleTest: _wf.go.#Test
-//examplePublish: _wf.go.#PublishService
-examplePublish: _wf.go.#PublishLibrary
-//example: workflows.cue.#PublishCuefig
+exampleTestPublic: _wf.go.#TestPublic
+//exampleTestPrivate:           _wf.go.#TestPrivate
+//examplePublishService:        _wf.go.#PublishServicePrivate
+//examplePublishLibraryPublic:  _wf.go.#PublishLibraryPublic
+//examplePublishLibraryPrivate: _wf.go.#PublishLibraryPrivate
+//example:                      workflows.cue.#PublishCuefig

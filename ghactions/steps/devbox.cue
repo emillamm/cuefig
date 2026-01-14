@@ -12,13 +12,16 @@ devbox: #DevboxInstallStep: githubactions.#Step & {
 	with: "enable-cache": "true"
 }
 
-devbox: #DevboxRunStep: githubactions.#Step & {
-	name: *"Run devbox command" | _
+devbox: #DevboxAuthStep: githubactions.#Step & {
 	env: {
 		// Override existing GH_TOKEN to access
 		// internal private repos.
 		GH_TOKEN: "${{ steps.get-token.outputs.token }}"
 	}
+}
+
+devbox: #DevboxRunStep: githubactions.#Step & {
+	name: *"Run devbox command" | _
 }
 
 devbox: #DevboxCueGenVerifyStep: devbox.#DevboxRunStep & {
