@@ -86,7 +86,7 @@ go: #PublishLibraryPublic: #PublishWorkflow & {
 		contents: "write"
 		packages: "read"
 	}
-	jobs: test: steps: [
+	jobs: publish: steps: [
 		// Prepare repo
 		#steps.github.#CheckoutStep,
 		// Prepare devbox
@@ -111,7 +111,7 @@ go: #PublishLibraryPrivate: #PublishWorkflow & {
 		contents: "write"
 		packages: "read"
 	}
-	jobs: test: steps: [
+	jobs: publish: steps: [
 		// Prepare repo
 		#steps.github.#CheckoutStep,
 		#steps.github.#RetrieveAccessTokenStep,
