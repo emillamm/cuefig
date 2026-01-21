@@ -17,6 +17,6 @@ _k8s: k8s & {
 //ns: _k8s.#Namespace
 //job: _k8s.spanner.#MigrationJob & {}
 //service:    _k8s.rollout.#Service
-//rollout:    _k8s.rollout.#Rollout
+rollout:    _k8s.rollout.#Rollout
 deployment: _k8s.deployment.#Deployment
 //sa:         _k8s.deployment.#ServiceAccount
