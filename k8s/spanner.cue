@@ -7,6 +7,7 @@ import batch "cue.dev/x/k8s.io/api/batch/v1"
 import "list"
 
 // spanner configuration
+spanner: #JobName:  string | *"db-migrate"
 spanner: #Instance: string | *"\(#Project)-prod-db"
 spanner: #Database: string | *"\(#Name)-prod"
 spanner: #Env: [...core.#EnvVar] | *[
@@ -56,7 +57,7 @@ spanner: #Sidecar: core.#Container & {
 
 spanner: #MigrationJob: batch.#Job & {
 	metadata: namespace: #Name
-	metadata: name:      "db-migrate"
+	metadata: name:      spanner.#JobName
 	metadata: annotations: {
 		"argocd.argoproj.io/hook":               "Sync"
 		"argocd.argoproj.io/hook-delete-policy": "HookSucceeded"

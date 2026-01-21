@@ -5,6 +5,7 @@ import core "cue.dev/x/k8s.io/api/core/v1"
 import "list"
 
 // rollout configuration
+rollout: #RolloutName: string | *#Name
 rollout: #Env: [...core.#EnvVar] | *#CommonEnv
 rollout: #ExtraEnv: [...core.#EnvVar] | *[]
 rollout: #Port: int | *8080
@@ -19,7 +20,7 @@ rollout: #Rollout: {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "Rollout"
 	metadata: {
-		name:      #Name
+		name:      rollout.#RolloutName
 		namespace: #Name
 	}
 	spec: replicas: 1
@@ -32,8 +33,8 @@ rollout: #Rollout: {
 	}, {
 		pause: duration: 1
 	}]
-	spec: selector: matchLabels: app: #Name
-	spec: template: metadata: labels: app: #Name
+	spec: selector: matchLabels: app: rollout.#RolloutName
+	spec: template: metadata: labels: app: rollout.#RolloutName
 	spec: template: spec: {
 		terminationGracePeriodSeconds: 25
 		affinity: {
@@ -84,9 +85,9 @@ rollout: #Rollout: {
 }
 
 rollout: #Service: core.#Service & {
-	metadata: name:      #Name
+	metadata: name:      rollout.#RolloutName
 	metadata: namespace: #Name
-	spec: selector: app: #Name
+	spec: selector: app: rollout.#RolloutName
 	spec: ports: [
 		{
 			protocol: "TCP"

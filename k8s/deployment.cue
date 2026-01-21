@@ -20,6 +20,7 @@ deployment: #ServiceAccount: core.#ServiceAccount & {
 }
 
 // k8s deployment configuration
+deployment: #DeploymentName: string | *#Name
 deployment: #Env: [...core.#EnvVar] | *#CommonEnv
 deployment: #ExtraEnv: [...core.#EnvVar] | *[]
 deployment: #Port: int | *8080
@@ -32,12 +33,12 @@ deploymentconfiguration: stateful: deployment & {
 
 deployment: #Deployment: apps.#Deployment & {
 	metadata: {
-		name:      #Name
+		name:      deployment.#DeploymentName
 		namespace: #Name
 	}
 	spec: replicas: 1
-	spec: selector: matchLabels: app: #Name
-	spec: template: metadata: labels: app: #Name
+	spec: selector: matchLabels: app: deployment.#DeploymentName
+	spec: template: metadata: labels: app: deployment.#DeploymentName
 	spec: template: spec: {
 		terminationGracePeriodSeconds: 25
 		affinity: {
@@ -88,9 +89,9 @@ deployment: #Deployment: apps.#Deployment & {
 }
 
 deployment: #Service: core.#Service & {
-	metadata: name:      #Name
+	metadata: name:      deployment.#DeploymentName
 	metadata: namespace: #Name
-	spec: selector: app: #Name
+	spec: selector: app: deployment.#DeploymentName
 	spec: ports: [
 		{
 			protocol: "TCP"
