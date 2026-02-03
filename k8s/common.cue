@@ -12,4 +12,12 @@ import core "cue.dev/x/k8s.io/api/core/v1"
 		name:  "ENVIRONMENT"
 		value: "prod"
 	},
+	{
+		name:  "SERVICE_NAME"
+		value: #Name
+	},
+	{
+		name:  "SERVICE_VERSION"
+		value: #ContainerVersion
+	},
 ]
