@@ -166,7 +166,7 @@ mixins: release: #WithGithubRelease: release.#WithSemver & {
 	#ReleaseConfig: {
 		#GithubReleaseSteps: [
 			#steps.version.#CreateReleaseStep & {
-				#Version:   "${{ steps.get-version.outputs.nextStrict }}-${{ steps.get-sha7.outputs.sha7 }}"
+				#Version: "${{ steps.get-version.outputs.nextStrict }}-${{ steps.get-sha7.outputs.sha7 }}"
 				#Artifacts: #ReleaseArtifacts
 			},
 		]

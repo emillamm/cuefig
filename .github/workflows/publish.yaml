@@ -25,12 +25,10 @@ jobs:
           token: ${{ github.token }}
           branch: main
           noVersionBumpBehavior: patch
-      - name: Login to Artifact Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate CUE OCI login creds
+        run: |-
+          mkdir -p ~/.docker
+          echo '{"auths":{"ghcr.io":{"auth":"'$(echo -n "${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}" | base64)'"}}}' > ~/.docker/config.json
       - env:
           CUE_REGISTRY: github.com/${{ github.repository }}=ghcr.io/${{ github.repository_owner }},registry.cue.works
         run: cue mod publish "v${{ steps.get-version.outputs.nextStrict }}"

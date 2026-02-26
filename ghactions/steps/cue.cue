@@ -17,13 +17,11 @@ cue: #InstallStep: githubactions.#Step & {
 }
 
 cue: #LoginStep: githubactions.#Step & {
-	name: "Login to Artifact Registry"
-	uses: ghactions.#DockerLoginAction
-	with: {
-		registry: "ghcr.io"
-		username: "${{ github.actor }}"
-		password: "${{ secrets.GITHUB_TOKEN }}"
-	}
+	name: "Generate CUE OCI login creds"
+	run: """
+		mkdir -p ~/.docker
+		echo '{"auths":{"ghcr.io":{"auth":"'$(echo -n "${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}" | base64)'"}}}' > ~/.docker/config.json
+		"""
 }
 
 cue: #PublishStep: githubactions.#Step & {
