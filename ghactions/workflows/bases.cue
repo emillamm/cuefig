@@ -45,6 +45,7 @@ import "list"
 			#ContentModifySteps: [...githubactions.#Step] | *[]
 			#ContentPushSteps: [...githubactions.#Step] | *[]
 		}
+		#GithubReleaseSteps: [...githubactions.#Step] | *[]
 
 		// Allow nested lists of steps, which get flattened by list.FlattenN
 		#PushContainersSteps: [...(githubactions.#Step | [...githubactions.#Step])] | *[]
@@ -78,6 +79,9 @@ import "list"
 
 		// Push version tag
 		#ReleaseConfig.#PushVersionTagSteps,
+
+		// Generate release
+		#ReleaseConfig.#GithubReleaseSteps,
 
 		// Push commit with repo content changes
 		#ReleaseConfig.#ContentModifyConfig.#ContentPushSteps,
@@ -153,6 +157,18 @@ mixins: release: #WithPushContainers: release.#WithSemver & {
 			#steps.gar.#AuthStep,
 			#steps.gar.#LoginStep,
 			#steps.gar.#PushImageSteps, // Produces a list of steps that will be flattened
+		]
+	}
+}
+
+mixins: release: #WithGithubRelease: release.#WithSemver & {
+	#ReleaseArtifacts: string
+	#ReleaseConfig: {
+		#GithubReleaseSteps: [
+			#steps.version.#CreateReleaseStep & {
+				#Version:   "'${{ steps.get-version.outputs.nextStrict }}-${{ steps.get-sha7.outputs.sha7 }}'"
+				#Artifacts: #ReleaseArtifacts
+			},
 		]
 	}
 }

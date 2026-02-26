@@ -10,3 +10,4 @@ package ghactions
 #DockerLoginAction:    "docker/login-action@v3"
 #DockerPushAction:     "docker/build-push-action@v6"
 #CueInstallAction:     "cue-lang/setup-cue@v1.0.1"
+#GithubReleaseAction:  "ncipollo/release-action@v1"

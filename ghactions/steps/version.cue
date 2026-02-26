@@ -55,3 +55,14 @@ version: #CreateTagStep: githubactions.#Step & {
 		})
 		"""
 }
+
+version: #CreateReleaseStep: githubactions.#Step & {
+	#Version:   string
+	#Artifacts: string
+	name:       "Generate Github Release"
+	uses:       ghactions.#GithubReleaseAction
+	with: {
+		tag:       #Version
+		artifacts: #Artifacts
+	}
+}
