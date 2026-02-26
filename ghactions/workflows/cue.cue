@@ -1,6 +1,8 @@
 package workflows
 
-cue: #PublishCuefig: #PublishWorkflow & {
+cue: #PublishCuefig: #Workflow & {
+	name: "Publish"
+	on: push: {}
 	jobs: publish: permissions: {
 		contents: "write"
 		packages: "write"

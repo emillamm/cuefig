@@ -1,6 +1,6 @@
 package ghactions
 
-#CacheAction:          "actions/cache@v4"
+#CacheAction:          "actions/cache@v5"
 #GithubAppTokenAction: "getsentry/action-github-app-token@v3"
 #CheckoutAction:       "actions/checkout@v6"
 #DevboxInstallAction:  "emillamm/devbox-install-action@restore-cache-key-v0.13.0"
