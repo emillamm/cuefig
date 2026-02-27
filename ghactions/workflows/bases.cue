@@ -123,8 +123,9 @@ mixins: #WithAppToken: #BuildWorkflow & {
 // Generate semver version of type "v1.2.3-abcdefg"
 mixins: release: #WithSemver: #PublishWorkflow & {
 	#ReleaseConfig: {
-		#PushVersionTagSteps: [
-			#steps.version.#CreateTagStep,
+		#GenerateVersionSteps: [
+			#steps.version.#GetVersionStep,
+			#steps.version.#GetSha7Step,
 		]
 	}
 }
