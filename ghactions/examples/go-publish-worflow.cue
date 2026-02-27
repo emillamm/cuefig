@@ -13,7 +13,7 @@ _wf: workflows & {
 
 //exampleTestPublic:            _wf.go.#TestPublic
 //exampleTestPrivate:           _wf.go.#TestPrivate
-//examplePublishService:        _wf.go.#PublishServicePrivate
+//examplePublishService: _wf.go.#PublishServicePrivate
 //examplePublishLibraryPublic:  _wf.go.#PublishLibraryPublic
 //examplePublishLibraryPrivate: _wf.go.#PublishLibraryPrivate
 //examplePublishCuefig:         workflows.cue.#PublishCuefig

@@ -23,15 +23,16 @@ go: #PublishServicePrivate: #PublishWorkflow &
 	mixins.#WithDevbox &
 	go.mixins.#WithGo &
 	mixins.release.#WithCueGenModify &
-	mixins.release.#WithPushContainers
+	mixins.release.#WithPushContainers &
+	mixins.release.#WithPushVersionTag
 
 go: #PublishLibraryPublic: #PublishWorkflow &
 	mixins.#WithDevbox &
 	go.mixins.#WithGo &
-	mixins.release.#WithSemver
+	mixins.release.#WithPushVersionTag
 
 go: #PublishLibraryPrivate: #PublishWorkflow &
 	mixins.#WithAppToken &
 	mixins.#WithDevbox &
 	go.mixins.#WithGo &
-	mixins.release.#WithSemver
+	mixins.release.#WithPushVersionTag

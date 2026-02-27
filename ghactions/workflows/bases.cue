@@ -120,19 +120,25 @@ mixins: #WithAppToken: #BuildWorkflow & {
 	}
 }
 
-// Generate and push semver version of type "v1.2.3-abcdefg"
+// Generate semver version of type "v1.2.3-abcdefg"
 mixins: release: #WithSemver: #PublishWorkflow & {
 	#ReleaseConfig: {
-		#GenerateVersionSteps: [
-			#steps.version.#GetVersionStep,
-			#steps.version.#GetSha7Step,
-		]
 		#PushVersionTagSteps: [
 			#steps.version.#CreateTagStep,
 		]
 	}
 }
 
+mixins: release: #WithPushVersionTag: release.#WithSemver & {
+	#ReleaseConfig: {
+		#PushVersionTagSteps: [
+			#steps.version.#CreateTagStep,
+		]
+	}
+}
+
+// Run cue-gen to modify content of repo and push as new commit.
+// E.g. for updating the version in manifest files.
 mixins: release: #WithCueGenModify: release.#WithSemver & {
 
 	#AppTokenConfig: #GHTokenMixin: githubactions.#Step | *_
@@ -161,13 +167,9 @@ mixins: release: #WithPushContainers: release.#WithSemver & {
 	}
 }
 
-mixins: release: #WithGithubRelease: #PublishWorkflow & {
+// Github release handles push of version tag. No need to call that afterwards.
+mixins: release: #WithGithubRelease: release.#WithSemver & {
 	#ReleaseArtifacts: string
-	#ReleaseConfig: {
-		#GenerateVersionSteps: [
-			#steps.version.#GetVersionStep,
-		]
-	}
 	#ReleaseConfig: {
 		#GithubReleaseSteps: [
 			#steps.version.#CreateReleaseStep & {
@@ -193,5 +195,4 @@ mixins: #WithDevbox: #BuildWorkflow & {
 			#steps.devbox.#DevboxCueGenVerifyStep & #AppTokenConfig.#GHTokenMixin,
 		]
 	}
-
 }
