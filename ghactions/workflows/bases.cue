@@ -161,12 +161,17 @@ mixins: release: #WithPushContainers: release.#WithSemver & {
 	}
 }
 
-mixins: release: #WithGithubRelease: release.#WithSemver & {
+mixins: release: #WithGithubRelease: #PublishWorkflow & {
 	#ReleaseArtifacts: string
+	#ReleaseConfig: {
+		#GenerateVersionSteps: [
+			#steps.version.#GetVersionStep,
+		]
+	}
 	#ReleaseConfig: {
 		#GithubReleaseSteps: [
 			#steps.version.#CreateReleaseStep & {
-				#Version: "${{ steps.get-version.outputs.nextStrict }}-${{ steps.get-sha7.outputs.sha7 }}"
+				#Version: "$v{{ steps.get-version.outputs.nextStrict }}"
 				#Artifacts: #ReleaseArtifacts
 			},
 		]
